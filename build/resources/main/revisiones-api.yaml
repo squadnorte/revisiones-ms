@@ -1,0 +1,120 @@
+openapi: 3.0.1
+info:
+  title: Revisiones API
+  description: Microservicio para la gestión de revisiones de seguridad y sus habilitadores
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8082
+    description: Servidor Local
+
+paths:
+  /cabeceras:
+    get:
+      summary: Obtener todas las cabeceras activas
+      operationId: obtenerTodasCabeceras
+      responses:
+        "200":
+          description: Lista de cabeceras obtenidas correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CabeceraRevisionDTO"
+
+    post:
+      summary: Crear una nueva cabecera de revisión
+      operationId: crearCabecera
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CabeceraRevisionDTO"
+      responses:
+        "201":
+          description: Cabecera creada exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CabeceraRevisionDTO"
+
+  /cabeceras/{id}:
+    get:
+      summary: Obtener una cabecera por ID
+      operationId: obtenerCabeceraPorId
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Cabecera obtenida correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CabeceraRevisionDTO"
+        "404":
+          description: No encontrada
+
+    put:
+      summary: Actualizar una cabecera de revisión
+      operationId: actualizarCabecera
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CabeceraRevisionDTO"
+      responses:
+        "200":
+          description: Cabecera actualizada exitosamente
+
+    delete:
+      summary: Marcar una cabecera como INACTIVA
+      operationId: eliminarCabecera
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Cabecera eliminada correctamente
+
+components:
+  schemas:
+    CabeceraRevisionDTO:
+      type: object
+      properties:
+        codigo:
+          type: integer
+        codJira:
+          type: string
+        squad:
+          type: string
+        po:
+          type: string
+        iniciativa:
+          type: string
+        analistaSeguridad:
+          type: string
+        usuarioAuditoria:
+          type: string
+        fechaAuditoria:
+          type: string
+          format: date-time
+        estadoAuditoria:
+          type: string
+        quarter:
+          type: string
